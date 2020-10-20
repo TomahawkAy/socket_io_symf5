@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('node_modules/socket.io-client/dist/socket.io.js') }}"></script>
+            <script>
+                let socket = io.connect('http://127.0.0.1:4500');
+                socket.on('connect',(instance)=>{
+                    console.log('socket connected ...');
+                    instance.on('add_notification',(data) => {
+                        console.log('the server have emitted the event ... '+data);
+                        console.log('do whatever you want when the server emits data ...');
+                    })
+                });
+
+                function emitButtonClicked(){
+                    socket.emit('button_clicked',{data:'test'});
+                }
+
+            </script>
+        {% endblock %}
+
+    </body>
+</html>
